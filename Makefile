@@ -48,3 +48,19 @@ format: ## run: cargo clippy && cargo fmt
 .PHONY:	clean
 clean: ## run: cargo clean
 	@cargo clean
+
+.PHONY:	meilisearch_up
+meilisearch_up: ## run: meilisearch server (default port: 7700. Please set 'MEILISEARCH_PORT' environment variable if you want to change port)
+	@./scripts/run_meilisearch.sh --up
+
+.PHONY:	meilisearch_down
+meilisearch_down: ## shutdown: meilisearch server
+	@./scripts/run_meilisearch.sh --down
+
+.PHONY:	meilisearch_log
+meilisearch_log: ## show log: meilisearch server
+	@./scripts/run_meilisearch.sh --log
+
+.PHONY:	meilisearch_shell
+meilisearch_shell: ## into shell: meilisearch server
+	@./scripts/run_meilisearch.sh --shell
