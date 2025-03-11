@@ -148,14 +148,14 @@ impl Default for Clips {
 }
 
 impl GetAttributes for Player {
-    fn get_attributes() -> Vec<String> {
+    fn get_filter_attributes() -> Vec<String> {
         let data = [
-            "id",
             "bio",
             "foot",
             "level",
             "gender",
             "height",
+            "v7Uuid",
             "status",
             "annualSalary",
             "currentValue",
@@ -164,6 +164,21 @@ impl GetAttributes for Player {
             "transferCondition",
             "currentCountryCode",
             "nationalityCountryCode",
+            "PoolPlayerTmpId",
+        ];
+
+        data.iter().map(|x| x.to_string()).collect()
+    }
+
+    fn get_sort_attributes() -> Vec<String> {
+        let data = [
+            "level",
+            "height",
+            "v7Uuid",
+            "fullName",
+            "annualSalary",
+            "currentValue",
+            "minutesPercentage",
             "PoolPlayerTmpId",
         ];
 
