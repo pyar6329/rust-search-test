@@ -1,3 +1,4 @@
+use crate::datasets::LoadData;
 use crate::traits::Parallelism;
 use anyhow::{Error, Result};
 use meilisearch_sdk::{
@@ -5,7 +6,9 @@ use meilisearch_sdk::{
     task_info::TaskInfo,
 };
 use serde::{Serialize, de::DeserializeOwned};
+use serde_json::Value as JsonValue;
 use std::ops::Deref;
+use tokio::sync::oneshot;
 use url::Url;
 
 type PageNum = u64;
@@ -31,6 +34,10 @@ impl Deref for Client {
     }
 }
 
+pub trait GetAttributes {
+    fn get_attributes() -> Vec<String>;
+}
+
 impl Client {
     pub fn connect(url: &Url, token: &str) -> Result<Self, Error> {
         let client = MeilisearchClient::new(url.to_string(), Some(token))?;
@@ -44,12 +51,43 @@ impl Client {
         primary_key: &str,
     ) -> Result<TaskInfo, Error>
     where
-        T: Serialize + Parallelism,
+        T: Serialize + Parallelism + GetAttributes,
     {
         let index = self.deref().index(index_name);
+
+        let _ = index.set_filterable_attributes(&T::get_attributes()).await;
+
         let result = index.add_documents(documents, Some(primary_key)).await?;
+
         Ok(result)
     }
+
+    // It cannot use because Meilisearch doesn't support JSONValue
+    // pub async fn create_index_from_json(
+    //     &self,
+    //     index_name: &str,
+    //     documents: &str,
+    //     primary_key: &str,
+    // ) -> Result<TaskInfo, Error> {
+    //     let index = self.deref().index(index_name);
+    //
+    //     let documents_string = documents.to_string();
+    //     let primary_key_string = primary_key.to_string();
+    //
+    //     let (tx, rx) = oneshot::channel();
+    //
+    //     tokio::spawn(async move {
+    //         let bytes = Box::leak(documents_string.into_boxed_str()).as_bytes();
+    //         let result = index
+    //             .add_documents_ndjson(bytes, Some(&primary_key_string))
+    //             .await;
+    //
+    //         let _ = tx.send(result);
+    //     });
+    //
+    //     let result = rx.await??;
+    //     Ok(result)
+    // }
 
     pub async fn search_title<T>(
         &self,
@@ -79,5 +117,12 @@ impl Client {
         };
 
         Ok(search_result)
+    }
+
+    pub async fn delete_index(&self, index_name: &str) -> Result<TaskInfo, Error> {
+        let index = self.deref().index(index_name);
+        let result = index.delete().await?;
+
+        Ok(result)
     }
 }

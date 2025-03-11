@@ -9,6 +9,10 @@ pub struct Config {
     pub meilisearch_host: String,
     #[serde(default = "default_token")]
     pub meilisearch_token: String,
+    #[serde(default = "default_json_path")]
+    pub json_path: String,
+    #[serde(default = "default_json_key")]
+    pub json_key: String,
 }
 
 pub fn default_host() -> String {
@@ -17,6 +21,14 @@ pub fn default_host() -> String {
 
 pub fn default_token() -> String {
     "masterKey".to_string()
+}
+
+pub fn default_json_path() -> String {
+    "sample.json".to_string()
+}
+
+pub fn default_json_key() -> String {
+    "data".to_string()
 }
 
 impl Config {
