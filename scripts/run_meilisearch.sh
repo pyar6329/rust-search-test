@@ -43,7 +43,11 @@ case "${ARGS}" in
       --name "${MEILISEARCH_CONTAINER_PS_NAME}" \
       -p "${MEILISEARCH_PORT:-7700}:7700" \
       -e MEILI_ENV="development" \
+      -e MEILI_MASTER_KEY="${MEILISEARCH_TOKEN:-masterKey}" \
       -e MEILI_NO_ANALYTICS="true" \
+      -e TZ="UTC" \
+      -e LANG="C.UTF-8" \
+      -e LC_ALL="C.UTF-8" \
       -v ${PROJECT_ROOT}/data:/meili_data \
       "getmeili/meilisearch:v${MEILISEARCH_VERSION}"
     ;;
