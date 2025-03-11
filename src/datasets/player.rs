@@ -14,12 +14,12 @@ pub struct Player {
     // pub bio: String,
     #[serde(rename = "foot")]
     pub foot: String,
-    #[serde(
-        rename = "clips",
-        deserialize_with = "default_if_empty", // default is "" if key doesn't exist
-        default // default is "" if key exists but value is null
-    )]
-    pub clips: Clips,
+    // #[serde(
+    //     rename = "clips",
+    //     deserialize_with = "default_if_empty", // default is "" if key doesn't exist
+    //     default // default is "" if key exists but value is null
+    // )]
+    // pub clips: Clips,
     // #[serde(rename = "gsmId")]
     // pub gsm_id: String,
     #[serde(rename = "level")]
