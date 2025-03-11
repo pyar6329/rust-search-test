@@ -1,12 +1,16 @@
 use crate::datasets::*;
 use crate::search::{Client, SearchData};
 use anyhow::{Error, Result};
+use crate::env::Config;
+use url::Url;
 
 pub async fn run_cli() -> Result<(), Error> {
-    let url = "http://localhost:7700".try_into()?;
-    let token = "masterKey";
+    let config = Config::new()?;
 
-    let client = Client::connect(&url, token)?;
+    let meilisearch_host = Url::parse(&config.meilisearch_host)?;
+    let meilisearch_token = config.meilisearch_token;
+
+    let client = Client::connect(&meilisearch_host, &meilisearch_token)?;
     let datasets = generate_movies();
 
     let index_name = "movies";
