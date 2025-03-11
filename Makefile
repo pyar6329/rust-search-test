@@ -64,3 +64,7 @@ meilisearch_log: ## show log: meilisearch server
 .PHONY:	meilisearch_shell
 meilisearch_shell: ## into shell: meilisearch server
 	@./scripts/run_meilisearch.sh --shell
+
+.PHONY:	dump_from_postgres
+dump_from_postgres: ## run: dump data from postgresql
+	@./scripts/dump_data_from_postgres.sh

@@ -3,3 +3,4 @@ recipe.json
 dump.rdb
 proptest-regressions
 /data
+/sample.json
