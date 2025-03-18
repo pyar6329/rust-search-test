@@ -41,6 +41,7 @@ impl Deref for Client {
 pub trait GetAttributes {
     fn get_filter_attributes() -> Vec<String>;
     fn get_sort_attributes() -> Vec<String>;
+    fn get_query_attributes() -> Vec<String>;
 }
 
 impl Client {
@@ -66,6 +67,10 @@ impl Client {
 
         let _ = index
             .set_sortable_attributes(&T::get_sort_attributes())
+            .await;
+
+        let _ = index
+            .set_searchable_attributes(&T::get_query_attributes())
             .await;
 
         let result = index.add_documents(documents, Some(primary_key)).await?;

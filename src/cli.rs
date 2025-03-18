@@ -31,7 +31,7 @@ pub async fn run_cli() -> Result<(), Error> {
 
     let index_name = "players_reduction";
     let delete_result = client.delete_index(index_name).await?;
-       println!("Index deleted: {:?}", delete_result);
+    println!("Index deleted: {:?}", delete_result);
     let created_index = client
         .create_index(index_name, &player_data.data, &primary_key)
         .await?;

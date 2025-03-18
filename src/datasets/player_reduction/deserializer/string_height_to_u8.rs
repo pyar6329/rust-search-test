@@ -4,7 +4,7 @@ use super::*;
 struct DecimalConverter;
 type DecimalConverterValue = DecimalValue<DecimalConverter>;
 
-pub fn string_height_to_u64<'de, D>(deserializer: D) -> Result<u64, D::Error>
+pub fn string_height_to_u8<'de, D>(deserializer: D) -> Result<u8, D::Error>
 where
     D: Deserializer<'de>,
 {
@@ -18,12 +18,8 @@ where
 
     if meter > min_height_meter && meter < max_height_meter {
         let centimeter = meter * DecimalConverterValue::from("100.0");
-        return Ok(centimeter.to_scaled_i64() as u64);
+        return Ok(centimeter.to_scaled_i64() as u8);
     }
 
-    u64::from_str(&s)
-        .map_err(serde::de::Error::custom)
-        .inspect_err(|e| {
-            eprintln!("deseralize string_to_u64 error: {:?}, value: {}", e, s);
-        })
+    Ok(meter.to_scaled_i64() as u8)
 }

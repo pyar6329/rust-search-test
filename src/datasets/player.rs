@@ -185,6 +185,11 @@ impl GetAttributes for Player {
 
         data.iter().map(|x| x.to_string()).collect()
     }
+
+    fn get_query_attributes() -> Vec<String> {
+        let data = ["fullName", "agentName", "shortName", "currentClubName"];
+        data.iter().map(|x| x.to_string()).collect()
+    }
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]

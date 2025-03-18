@@ -12,12 +12,12 @@ pub struct PlayerReductionData {
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct PlayerReduction {
-    #[serde(rename = "id")]
-    pub id: String,
+    #[serde(rename = "id", deserialize_with = "string_to_hash_data")]
+    pub id: u32,
     // #[serde(rename = "bio")]
     // pub bio: String,
-    #[serde(rename = "foot")]
-    pub foot: String,
+    #[serde(rename = "foot", deserialize_with = "string_to_hash_data")]
+    pub foot: u32,
     // #[serde(
     //     rename = "clips",
     //     deserialize_with = "default_if_empty", // default is "" if key doesn't exist
@@ -26,24 +26,24 @@ pub struct PlayerReduction {
     // pub clips: Clips,
     // #[serde(rename = "gsmId")]
     // pub gsm_id: String,
-    #[serde(rename = "level")]
-    pub level: String,
-    #[serde(rename = "gender")]
-    pub gender: String,
+    #[serde(rename = "level", deserialize_with = "string_to_hash_data")]
+    pub level: u32,
+    #[serde(rename = "gender", deserialize_with = "string_to_hash_data")]
+    pub gender: u32,
     #[serde(
         rename = "height",
-        deserialize_with = "string_height_to_u64",
+        deserialize_with = "string_height_to_u8",
         // serialize_with = "u64_as_number"
     )]
-    pub height: u64,
-    #[serde(rename = "status")]
-    pub status: String,
+    pub height: u8,
+    #[serde(rename = "status", deserialize_with = "string_to_hash_data")]
+    pub status: u32,
     #[serde(rename = "teamId")]
     pub team_id: String,
-    #[serde(rename = "v7Uuid")]
-    pub v7_uuid: String,
-    #[serde(rename = "weight")]
-    pub weight: String,
+    #[serde(rename = "v7Uuid", deserialize_with = "string_to_hash_data")]
+    pub v7_uuid: u32,
+    #[serde(rename = "weight", deserialize_with = "string_weight_to_u8")]
+    pub weight: u8,
     // #[serde(rename = "agentId")]
     // pub agent_id: String,
     // #[serde(rename = "agencyId")]
@@ -64,8 +64,8 @@ pub struct PlayerReduction {
     pub updated_at: String,
     // #[serde(rename = "vimeoLink")]
     // pub vimeo_link: String, // JSON文字列はそのままString型で
-    #[serde(rename = "wyscoutId")]
-    pub wyscout_id: String,
+    #[serde(rename = "wyscoutId", deserialize_with = "string_to_u64")]
+    pub wyscout_id: u64,
     // #[serde(rename = "agencyName")]
     // pub agency_name: String,
     // #[serde(rename = "agentEmail")]
@@ -76,8 +76,8 @@ pub struct PlayerReduction {
     // pub agency_email: String,
     // #[serde(rename = "agencyImage")]
     // pub agency_image: String,
-    #[serde(rename = "playerEmail")]
-    pub player_email: String,
+    #[serde(rename = "playerEmail", deserialize_with = "string_to_hash_data")]
+    pub player_email: u32,
     // #[serde(rename = "youtubeLink")]
     // pub youtube_link: String, // JSON文字列はそのままString型で
     #[serde(rename = "annualSalary", deserialize_with = "string_cost_to_u64")]
@@ -86,8 +86,8 @@ pub struct PlayerReduction {
     // pub club_contacts: String,
     #[serde(rename = "currentValue", deserialize_with = "string_cost_to_u64")]
     pub current_value: u64,
-    #[serde(rename = "imageDataURL")]
-    pub image_data_url: String,
+    #[serde(rename = "imageDataURL", deserialize_with = "string_to_hash_data")]
+    pub image_data_url: u32,
     #[serde(rename = "subPositions")]
     pub sub_positions: String,
     #[serde(rename = "mainPositions")]
@@ -107,15 +107,15 @@ pub struct PlayerReduction {
     // #[serde(rename = "playerInstagram")]
     // pub player_instagram: String,
     #[serde(rename = "willContainLabel")]
-    pub will_contain_label: String,
+    pub will_contain_label: String, // TODO: boolっぽい
     #[serde(
         rename = "minutesPercentage",
         deserialize_with = "default_if_empty", // default is "" if key doesn't exist
         default // default is "" if key exists but value is null
     )]
     pub minutes_percentage: MinutesPercentageReduction,
-    #[serde(rename = "transferCondition")]
-    pub transfer_condition: String,
+    #[serde(rename = "transferCondition", deserialize_with = "string_to_hash_data")]
+    pub transfer_condition: u32,
     // #[serde(rename = "transfermarktData")]
     // pub transfermarkt_data: String,
     #[serde(rename = "contractExpiration")]
@@ -187,6 +187,11 @@ impl GetAttributes for PlayerReduction {
             "PoolPlayerTmpId",
         ];
 
+        data.iter().map(|x| x.to_string()).collect()
+    }
+
+    fn get_query_attributes() -> Vec<String> {
+        let data = ["fullName", "agentName", "shortName", "currentClubName"];
         data.iter().map(|x| x.to_string()).collect()
     }
 }
