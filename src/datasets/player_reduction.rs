@@ -41,8 +41,8 @@ pub struct PlayerReduction {
     pub height: u8,
     #[serde(rename = "status", deserialize_with = "string_to_hash_data")]
     pub status: u32,
-    #[serde(rename = "teamId")]
-    pub team_id: String,
+    #[serde(rename = "teamId", deserialize_with = "string_to_hash_data")]
+    pub team_id: u32,
     #[serde(rename = "v7Uuid", deserialize_with = "string_to_hash_data")]
     pub v7_uuid: u32,
     #[serde(rename = "weight", deserialize_with = "string_weight_to_u8")]
