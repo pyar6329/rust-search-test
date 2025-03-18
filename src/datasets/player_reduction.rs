@@ -5,7 +5,7 @@ use deserializer::*;
 use serializer::*;
 
 use super::{DecimalValue, Deserialize, GetAttributes, Serialize, default_if_empty};
-use chrono::{DateTime, Utc};
+use chrono::{DateTime, NaiveDate, Utc};
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct PlayerReductionData {
@@ -57,8 +57,12 @@ pub struct PlayerReduction {
     // pub ogol_link: String,
     #[serde(rename = "agentName")]
     pub agent_name: String,
-    #[serde(rename = "birthDate")]
-    pub birth_date: String,
+    #[serde(
+        rename = "birthDate",
+        deserialize_with = "date_string_to_naive_date",
+        serialize_with = "naive_date_to_timestamp_u32"
+    )]
+    pub birth_date: NaiveDate,
     // #[serde(rename = "createdAt")]
     // pub created_at: String,
     #[serde(rename = "shortName")]
@@ -125,8 +129,12 @@ pub struct PlayerReduction {
     pub transfer_condition: u32,
     // #[serde(rename = "transfermarktData")]
     // pub transfermarkt_data: String,
-    #[serde(rename = "contractExpiration")]
-    pub contract_expiration: String,
+    #[serde(
+        rename = "contractExpiration",
+        deserialize_with = "date_string_to_naive_date",
+        serialize_with = "naive_date_to_timestamp_u32"
+    )]
+    pub contract_expiration: NaiveDate,
     #[serde(rename = "currentCountryCode")]
     pub current_country_code: String,
     // #[serde(rename = "playerCurrentState")]

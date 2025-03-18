@@ -1,10 +1,12 @@
 use super::*;
+use crate::utils::default_naive_date;
 
 const DATE_FORMATS: [&str; 4] = [
-    "%Y-%m-%d",   // 2025-03-06
-    "%Y-%m-%-d",  // 2025-03-6
-    "%Y-%-m-%d",  // 2025-3-06
+    "%Y-%m-%d",  // 2025-03-06
+    "%Y-%m-%-d", // 2025-03-6
+    "%Y-%-m-%d", // 2025-3-06
     "%Y-%-m-%-d", // 2025-3-6
+                 // TODO: 0-0-0が渡ってくる可能性があるのでなんとかする
 ];
 
 pub fn date_string_to_naive_date<'de, D>(deserializer: D) -> Result<NaiveDate, D::Error>
@@ -18,7 +20,8 @@ where
         return Ok(default_naive_date());
     }
 
-    let value = parse_date(trimmed_s).map_err(serde::de::Error::custom)?;
+    // let value = parse_date(trimmed_s).map_err(serde::de::Error::custom)?;
+    let value = parse_date(trimmed_s).unwrap_or(default_naive_date());
     Ok(value)
 }
 
