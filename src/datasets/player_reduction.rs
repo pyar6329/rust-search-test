@@ -1,13 +1,17 @@
-use super::*;
+mod deserializer;
+
+use deserializer::*;
+
+use super::{DecimalValue, Deserialize, GetAttributes, Serialize, default_if_empty};
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct PlayerData {
+pub struct PlayerReductionData {
     #[serde(rename = "data")]
-    pub data: Vec<Player>,
+    pub data: Vec<PlayerReduction>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct Player {
+pub struct PlayerReduction {
     #[serde(rename = "id")]
     pub id: String,
     // #[serde(rename = "bio")]
@@ -109,7 +113,7 @@ pub struct Player {
         deserialize_with = "default_if_empty", // default is "" if key doesn't exist
         default // default is "" if key exists but value is null
     )]
-    pub minutes_percentage: MinutesPercentage,
+    pub minutes_percentage: MinutesPercentageReduction,
     #[serde(rename = "transferCondition")]
     pub transfer_condition: String,
     // #[serde(rename = "transfermarktData")]
@@ -147,7 +151,7 @@ impl Default for Clips {
     }
 }
 
-impl GetAttributes for Player {
+impl GetAttributes for PlayerReduction {
     fn get_filter_attributes() -> Vec<String> {
         let data = [
             "bio",
@@ -188,5 +192,5 @@ impl GetAttributes for Player {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct MinutesPercentageValue;
-pub type MinutesPercentage = DecimalValue<MinutesPercentageValue>;
+pub struct MinutesPercentageReductionValue;
+pub type MinutesPercentageReduction = DecimalValue<MinutesPercentageReductionValue>;

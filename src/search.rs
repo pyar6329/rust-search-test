@@ -1,3 +1,5 @@
+mod filter;
+
 use crate::datasets::LoadData;
 use crate::traits::Parallelism;
 use anyhow::{Error, Result};
@@ -10,6 +12,8 @@ use serde_json::Value as JsonValue;
 use std::ops::Deref;
 use tokio::sync::oneshot;
 use url::Url;
+
+pub use filter::*;
 
 type PageNum = u64;
 type TotalHitNum = u64;

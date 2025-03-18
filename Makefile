@@ -29,6 +29,7 @@ run: ## run: cargo run
 	@make build
 	@cargo run --quiet -j $(CPU_CORES) -- $(ARGS)
 
+.PHONY:	run_release
 run_release: ## run: cargo build --release and run binary
 	@make release
 	@./target/x86_64-unknown-linux-musl/release/searchy $(ARGS)

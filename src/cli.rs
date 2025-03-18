@@ -1,6 +1,6 @@
 use crate::datasets::*;
 use crate::env::Config;
-use crate::search::{Client, SearchData};
+use crate::search::Client;
 use anyhow::{Error, Result};
 use url::Url;
 
@@ -10,7 +10,8 @@ pub async fn run_cli() -> Result<(), Error> {
     let json_path = config.json_path;
     let primary_key = config.json_key;
 
-    let player_data: PlayerData = LoadData::from_json_file_to_struct(&json_path)?;
+    //   let player_data: PlayerData = LoadData::from_json_file_to_struct(&json_path)?;
+    let player_data: PlayerReductionData = LoadData::from_json_file_to_struct(&json_path)?;
     //   let json_files = LoadData::from_json_file(&json_path, &json_key)?;
     //   let ndjson_string = LoadData::from_vec_json_to_ndjson(&json_files);
 
@@ -28,9 +29,9 @@ pub async fn run_cli() -> Result<(), Error> {
     //       .create_index(index_name, &datasets, primary_key)
     //       .await?;
 
-    let index_name = "players";
+    let index_name = "players_reduction";
     let delete_result = client.delete_index(index_name).await?;
-    println!("Index deleted: {:?}", delete_result);
+       println!("Index deleted: {:?}", delete_result);
     let created_index = client
         .create_index(index_name, &player_data.data, &primary_key)
         .await?;
