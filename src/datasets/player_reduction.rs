@@ -1,8 +1,11 @@
 mod deserializer;
+mod serializer;
 
 use deserializer::*;
+use serializer::*;
 
 use super::{DecimalValue, Deserialize, GetAttributes, Serialize, default_if_empty};
+use chrono::{DateTime, Utc};
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct PlayerReductionData {
@@ -60,8 +63,12 @@ pub struct PlayerReduction {
     // pub created_at: String,
     #[serde(rename = "shortName")]
     pub short_name: String,
-    #[serde(rename = "updatedAt")]
-    pub updated_at: String,
+    #[serde(
+        rename = "updatedAt",
+        deserialize_with = "iso8601_string_to_datetime",
+        serialize_with = "datetime_to_timestamp_u32"
+    )]
+    pub updated_at: DateTime<Utc>,
     // #[serde(rename = "vimeoLink")]
     // pub vimeo_link: String, // JSON文字列はそのままString型で
     #[serde(rename = "wyscoutId", deserialize_with = "string_to_u64")]
